@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PizzaDonModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="pelanggan">
+    <Key>
+      <PropertyRef Name="Id_pelanggan" />
+    </Key>
+    <Property Name="Id_pelanggan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nvarchar" MaxLength="50" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" />
+    <Property Name="nama_lengkap" Type="nvarchar" MaxLength="50" />
+    <Property Name="nohp" Type="nvarchar" MaxLength="50" />
+    <Property Name="alamat" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Pembayaran">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_pelanggan" Type="int" Nullable="false" />
+    <Property Name="id_pizza" Type="int" />
+    <Property Name="nama_pizza" Type="nvarchar" MaxLength="50" />
+    <Property Name="ukuran_pizza" Type="nvarchar" MaxLength="50" />
+    <Property Name="topping_pizza" Type="nvarchar" MaxLength="50" />
+    <Property Name="jumlah_pizza" Type="nvarchar" MaxLength="50" />
+    <Property Name="harga_pizza" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="pizza">
+    <Key>
+      <PropertyRef Name="Id_pizza" />
+    </Key>
+    <Property Name="Id_pizza" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nama_pizza" Type="nvarchar" MaxLength="50" />
+    <Property Name="harga_pizza" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="ukuran">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ukuran" Type="nvarchar" MaxLength="50" />
+    <Property Name="harga" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="fk_pelanggan">
+    <End Role="pelanggan" Type="Self.pelanggan" Multiplicity="1" />
+    <End Role="Pembayaran" Type="Self.Pembayaran" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pelanggan">
+        <PropertyRef Name="Id_pelanggan" />
+      </Principal>
+      <Dependent Role="Pembayaran">
+        <PropertyRef Name="id_pelanggan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_pizza">
+    <End Role="pizza" Type="Self.pizza" Multiplicity="0..1" />
+    <End Role="Pembayaran" Type="Self.Pembayaran" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pizza">
+        <PropertyRef Name="Id_pizza" />
+      </Principal>
+      <Dependent Role="Pembayaran">
+        <PropertyRef Name="id_pizza" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PizzaDonModelStoreContainer">
+    <EntitySet Name="pelanggan" EntityType="Self.pelanggan" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Pembayaran" EntityType="Self.Pembayaran" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="pizza" EntityType="Self.pizza" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ukuran" EntityType="Self.ukuran" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_pelanggan" Association="Self.fk_pelanggan">
+      <End Role="pelanggan" EntitySet="pelanggan" />
+      <End Role="Pembayaran" EntitySet="Pembayaran" />
+    </AssociationSet>
+    <AssociationSet Name="fk_pizza" Association="Self.fk_pizza">
+      <End Role="pizza" EntitySet="pizza" />
+      <End Role="Pembayaran" EntitySet="Pembayaran" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

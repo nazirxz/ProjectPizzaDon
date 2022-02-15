@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PizzaDonModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="pelanggan">
+    <Key>
+      <PropertyRef Name="Id_pelanggan" />
+    </Key>
+    <Property Name="Id_pelanggan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="nama_lengkap" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="nohp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="alamat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Pembayarans" Relationship="Self.fk_pelanggan" FromRole="pelanggan" ToRole="Pembayaran" />
+  </EntityType>
+  <EntityType Name="Pembayaran">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_pelanggan" Type="Int32" Nullable="false" />
+    <Property Name="id_pizza" Type="Int32" />
+    <Property Name="nama_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ukuran_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="topping_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="jumlah_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="harga_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="pelanggan" Relationship="Self.fk_pelanggan" FromRole="Pembayaran" ToRole="pelanggan" />
+    <NavigationProperty Name="pizza" Relationship="Self.fk_pizza" FromRole="Pembayaran" ToRole="pizza" />
+  </EntityType>
+  <EntityType Name="pizza">
+    <Key>
+      <PropertyRef Name="Id_pizza" />
+    </Key>
+    <Property Name="Id_pizza" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nama_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="harga_pizza" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Pembayarans" Relationship="Self.fk_pizza" FromRole="pizza" ToRole="Pembayaran" />
+  </EntityType>
+  <EntityType Name="ukuran">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ukuran1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="harga" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="fk_pelanggan">
+    <End Role="pelanggan" Type="Self.pelanggan" Multiplicity="1" />
+    <End Role="Pembayaran" Type="Self.Pembayaran" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pelanggan">
+        <PropertyRef Name="Id_pelanggan" />
+      </Principal>
+      <Dependent Role="Pembayaran">
+        <PropertyRef Name="id_pelanggan" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_pizza">
+    <End Role="pizza" Type="Self.pizza" Multiplicity="0..1" />
+    <End Role="Pembayaran" Type="Self.Pembayaran" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="pizza">
+        <PropertyRef Name="Id_pizza" />
+      </Principal>
+      <Dependent Role="Pembayaran">
+        <PropertyRef Name="id_pizza" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PizzaDonEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="pelanggans" EntityType="Self.pelanggan" />
+    <EntitySet Name="Pembayarans" EntityType="Self.Pembayaran" />
+    <EntitySet Name="pizzas" EntityType="Self.pizza" />
+    <EntitySet Name="ukurans" EntityType="Self.ukuran" />
+    <AssociationSet Name="fk_pelanggan" Association="Self.fk_pelanggan">
+      <End Role="pelanggan" EntitySet="pelanggans" />
+      <End Role="Pembayaran" EntitySet="Pembayarans" />
+    </AssociationSet>
+    <AssociationSet Name="fk_pizza" Association="Self.fk_pizza">
+      <End Role="pizza" EntitySet="pizzas" />
+      <End Role="Pembayaran" EntitySet="Pembayarans" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
